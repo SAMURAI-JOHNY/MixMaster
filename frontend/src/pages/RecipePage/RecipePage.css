@@ -1,0 +1,1125 @@
+.recipe-page {
+  min-height: 100vh;
+  background: #0A0A0A;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #C8A97E;
+  overflow-x: hidden;
+  padding-bottom: 30px;
+}
+
+.recipe-container {
+  max-width: 1200px;
+  margin: 30px auto;
+}
+
+/* Секция с заголовком и изображением */
+.recipe-header-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.recipe-text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recipe-image-content {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cocktail-image {
+  width: 472px;
+  height: 517px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.recipe-title-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.recipe-title {
+  margin: 0;
+  font-size: 64px;
+  font-weight: 700;
+  color: white;
+  flex: 1;
+}
+
+.edit-cocktail-button {
+  padding: 10px 20px;
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.edit-cocktail-button:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.cocktail-description {
+  font-size: 32px;
+  line-height: 1.6;
+  color: #616161;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background: #616161;
+  margin: 30px 0;
+  border: none;
+}
+
+/* Остальные стили оставь как были */
+.recipe-content {
+  padding: 0;
+}
+
+.recipe-main {
+  margin-bottom: 30px;
+}
+
+.recipe-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.ingredients-column {
+  background: transparent;
+  padding: 0;
+  border-left: none;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.cocktail-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.cocktail-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cocktail-action-btn {
+  background: transparent;
+  border: 2px solid #C8A97E;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.cocktail-action-btn:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.cocktail-action-btn img {
+  width: 20px;
+  height: 20px;
+  filter: invert(0.8);
+}
+
+.delete-cocktail-btn:hover {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.delete-cocktail-btn img {
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(330deg);
+}
+
+.section-title {
+  font-size: 32px;
+  padding: 10px 2px;
+  font-weight: 600;
+  color: #C8A97E;
+  margin: 0;
+  text-align: left; 
+}
+
+.recipe-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.recipe-action-btn {
+  background: transparent;
+  border: 2px solid #C8A97E;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.recipe-action-btn:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.recipe-action-btn img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(68%) sepia(20%) saturate(1000%) hue-rotate(5deg) brightness(0.9);
+}
+
+.delete-recipe-btn:hover img {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(0.9);
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: #616161;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.ingredients-table {
+  width: 100%;
+  background: transparent; 
+  border-collapse: collapse;
+}
+
+.ingredients-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #616161;
+  font-size: 24px;
+  color: white;
+  white-space: nowrap;
+}
+
+.ingredients-table td:first-child {
+  padding-right: 900px;
+  border-bottom: 1px solid #616161;
+}
+
+.ingredients-table tr:last-child td {
+  border-bottom: 1px solid #616161 !important;
+}
+
+.ingredient-name {
+  font-weight: 500;
+  color: white;
+  text-align: left;
+  padding-right: 50em;
+}
+
+.ingredient-volume {
+  color: #616161;
+  font-weight: 600;
+  text-align: right;
+}
+
+.preparation-column {
+  background: transparent;
+  padding: 0;
+  border-left: none;
+}
+
+.preparation-text {
+  font-size: 32px;
+  line-height: 1.6;
+  color: #616161;
+}
+
+.cocktail-info {
+  margin-bottom: 30px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  background: transparent;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: left;
+  border: 1px solid #C8A97E;
+  border-radius: 4px;
+  padding: 4px 8px;
+  width: 300px;
+  background: transparent;
+  text-align: left; 
+}
+
+.info-label {
+  font-size: 24px; 
+  color: #C8A97E;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-size: 18px; 
+  color: white;
+  font-weight: 600;
+  text-align: left; 
+}
+
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.info-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #C8A97E;
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  background: transparent;
+}
+
+.calories-text {
+  text-align: right;
+}
+
+.calories-label {
+  font-size: 14px;
+  color: #C8A97E;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.calories-value {
+  font-size: 24px;
+  color: white;
+  font-weight: 600;
+}
+
+.portion-item {
+  margin: 20px 0;
+}
+
+.portion-text {
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+}
+
+/* Стили для выбора рецепта */
+.recipe-selector {
+  margin-bottom: 30px;
+}
+
+.recipe-select-label {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #C8A97E;
+  margin-bottom: 10px;
+}
+
+.recipe-select {
+  width: 100%;
+  max-width: 500px;
+  padding: 14px 50px 14px 20px;
+  border: 2px solid #616161;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  background: #0A0A0A;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23C8A97E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  background-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+.recipe-select:hover {
+  border-color: #C8A97E;
+  background-color: rgba(200, 169, 126, 0.05);
+}
+
+.recipe-select:focus {
+  outline: none;
+  border-color: #C8A97E;
+  box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
+}
+
+.recipe-description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #616161;
+  font-style: italic;
+}
+
+/* Стили для кнопок списания и проверки */
+.portions-control {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #333;
+  flex-wrap: wrap;
+}
+
+.portion-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(200, 169, 126, 0.1);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid #C8A97E;
+}
+
+.portion-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portion-btn:hover {
+  background: rgba(200, 169, 126, 0.2);
+}
+
+.portion-btn img {
+  width: 24px;
+  height: 24px;
+  filter: invert(0.8);
+}
+
+.portion-btn:hover img {
+  filter: invert(1);
+}
+
+.portions-count {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Стили для кнопок */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-left: auto;
+}
+
+.action-button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Кнопка "Списать ингредиенты" */
+.action-button:first-child {
+  background: #C8A97E;
+  color: #0A0A0A;
+  border: none;
+}
+
+.action-button:first-child:hover {
+  background: #d1bfa5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 169, 126, 0.3);
+}
+
+/* Кнопка "Проверить остатки" */
+.action-button:last-child {
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+}
+
+.action-button:last-child:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 169, 126, 0.2);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .recipe-select {
+    max-width: 100%;
+  }
+  
+  .portions-control {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .portion-controls {
+    justify-content: center;
+    order: 2;
+  }
+  
+  .action-buttons {
+    margin-left: 0;
+    order: 3;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Если нужны иконки в кнопках */
+.action-button.with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.action-button:first-child .action-icon {
+  filter: brightness(0) invert(0);
+}
+
+.action-button:last-child .action-icon {
+  filter: brightness(0) invert(0.8);
+}
+
+.action-buttons {
+  padding-left: 500px;
+  padding-top: 30px;
+  border-top: 1px solid #616161;
+}
+
+.action-button {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .recipe-header-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .recipe-image-content {
+    justify-content: center;
+  }
+  
+  .cocktail-image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .recipe-columns {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Стили для счётчика порций */
+.portions-control {
+  display: flex;
+}
+
+.portions-label {
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.portions-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portion-btn {
+  background: transparent;
+  border: 1px solid #616161;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.portion-btn:hover:not(:disabled) {
+  background: #616161;
+  border-color: white;
+}
+
+.portion-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.portion-btn img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1);
+}
+
+.portion-btn:hover:not(:disabled) img {
+  filter: invert(0);
+}
+
+.portions-count {
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Обновляем стили для ингредиентов */
+.ingredient-volume {
+  color: white;
+  font-weight: 600;
+  text-align: right;
+  padding-left: 20px;
+  font-size: 16px;
+}
+
+/* Адаптивность для счётчика порций */
+@media (max-width: 768px) {
+  .portions-control {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .portion-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .portion-btn img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .portions-count {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portions-control {
+    padding: 12px;
+  }
+  
+  .portions-label {
+    font-size: 14px;
+  }
+  
+  .portion-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .portion-btn img {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .portions-count {
+    font-size: 16px;
+  }
+  
+  .ingredient-volume {
+    font-size: 14px;
+  }
+}
+
+/* Секция с заголовком и изображением */
+.recipe-header-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.recipe-text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recipe-image-content {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cocktail-image {
+  width: 472px;
+  height: 517px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.recipe-title-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.recipe-title {
+  margin: 0;
+  font-size: 64px;
+  font-weight: 700;
+  color: white;
+  flex: 1;
+}
+
+.edit-cocktail-button {
+  padding: 10px 20px;
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.edit-cocktail-button:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.cocktail-description {
+  font-size: 32px;
+  line-height: 1.6;
+  color: #616161;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background: #616161;
+  margin: 30px 0;
+  border: none;
+}
+
+.recipe-content {
+  padding: 0;
+}
+
+.recipe-main {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #C8A97E;
+  margin-bottom: 8px;
+}
+
+/* Стили для выбора рецепта */
+.recipe-selector {
+  margin-bottom: 30px;
+}
+
+.recipe-select-label {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #C8A97E;
+  margin-bottom: 10px;
+}
+
+.recipe-select {
+  width: 100%;
+  max-width: 500px;
+  padding: 14px 50px 14px 20px;
+  border: 2px solid #616161;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  background: #0A0A0A;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23C8A97E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  background-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+.recipe-select:hover {
+  border-color: #C8A97E;
+  background-color: rgba(200, 169, 126, 0.05);
+}
+
+.recipe-select:focus {
+  outline: none;
+  border-color: #C8A97E;
+  box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
+}
+
+.recipe-description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #616161;
+  font-style: italic;
+}
+
+/* Таблица ингредиентов */
+.ingredients-table {
+  width: 100%;
+  background: transparent; 
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.ingredients-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #616161;
+  font-size: 24px;
+  color: white;
+  white-space: nowrap;
+}
+
+.ingredient-name {
+  font-weight: 500;
+  color: white;
+  text-align: left;
+  padding-right: 50px;
+}
+
+.ingredient-volume {
+  color: #616161;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Текст приготовления */
+.preparation-text {
+  font-size: 32px;
+  line-height: 1.6;
+  color: #616161;
+  margin: 20px 0;
+}
+
+/* ABV и калорийность */
+.info-label {
+  font-size: 12px;
+  color: #C8A97E;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.info-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #C8A97E;
+  border-radius: 4px;
+  padding: 8px 12px;
+  width: 300px;
+  background: transparent;
+}
+
+.info-value {
+  font-size: 18px;
+  color: white;
+  font-weight: 600;
+}
+
+.calories-text {
+  text-align: right;
+  margin-left: auto;
+}
+
+.calories-label {
+  font-size: 14px;
+  color: #C8A97E;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.calories-value {
+  font-size: 24px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Стили для кнопок списания и проверки */
+.portions-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 40px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-top: 1px solid #333;
+  flex-wrap: wrap;
+}
+
+.portion-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.portion-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(200, 169, 126, 0.1);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid #C8A97E;
+}
+
+.portion-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portion-btn:hover {
+  background: rgba(200, 169, 126, 0.2);
+}
+
+.portion-btn img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(0.8);
+}
+
+.portion-btn:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.portions-count {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Стили для кнопок действий */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-left: auto;
+}
+
+.action-button {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+/* Кнопка "Списать ингредиенты" */
+.action-button.spend-button {
+  background: #C8A97E;
+  color: #0A0A0A;
+}
+
+.action-button.spend-button:hover {
+  background: #d1bfa5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 169, 126, 0.3);
+}
+
+/* Кнопка "Проверить остатки" */
+.action-button.check-button {
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+}
+
+.action-button.check-button:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 169, 126, 0.2);
+}
+
+/* Стили для бейджа "уже был приготовлен" */
+.prepared-badge {
+  padding: 6px 12px;
+  margin-bottom: 15px;
+  background: rgba(200, 169, 126, 0.15);
+  color: #C8A97E;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  border: 1px solid rgba(200, 169, 126, 0.5);
+  display: inline-block;
+}
+
+/* Стили для кнопок действий на странице рецепта */
+.recipe-action-button {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.recipe-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recipe-action-button.check-button {
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+}
+
+.recipe-action-button.check-button:hover:not(:disabled) {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.recipe-action-button.prepare-button {
+  background: #C8A97E;
+  color: #0A0A0A;
+  border: 2px solid #C8A97E;
+}
+
+.recipe-action-button.prepare-button:hover:not(:disabled) {
+  background: #d1bfa5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.recipe-action-button.stock-button {
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+}
+
+.recipe-action-button.stock-button:hover:not(:disabled) {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}

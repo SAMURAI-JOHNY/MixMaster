@@ -1,0 +1,15 @@
+.ingredientsPage {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #0A0A0A;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 600px) {
+  .ingredientsPage {
+    padding: 10px;
+  }
+}

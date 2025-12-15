@@ -1,0 +1,27 @@
+/* ui/Button/Button.css */
+.btn {
+  padding: 12px 30px;
+  width: 200px;
+  height: 59;
+  background: #C8A97E;
+  color: #0A0A0A;
+  border-radius: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.btn-primary {
+  color: #0A0A0A
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}

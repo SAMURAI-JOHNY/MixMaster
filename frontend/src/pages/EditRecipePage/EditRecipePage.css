@@ -1,0 +1,194 @@
+.edit-recipe-page {
+  min-height: 100vh;
+  background: #0A0A0A;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #C8A97E;
+  padding-bottom: 30px;
+}
+
+.edit-recipe-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.edit-recipe-content {
+  background: transparent;
+  padding: 40px;
+}
+
+.edit-recipe-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.error-message {
+  padding: 15px;
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 8px;
+  color: #ff6b6b;
+  margin-bottom: 20px;
+}
+
+.edit-recipe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #C8A97E;
+}
+
+.form-textarea,
+.form-input,
+.form-select {
+  padding: 14px;
+  border: 2px solid #616161;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  background: #0A0A0A;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-textarea:focus,
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #C8A97E;
+  box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.ingredient-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-select {
+  flex: 2;
+}
+
+.volume-input {
+  flex: 1;
+  max-width: 150px;
+}
+
+.remove-ingredient-btn {
+  background: transparent;
+  border: 2px solid #ff6b6b;
+  color: #ff6b6b;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.remove-ingredient-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+  transform: scale(1.1);
+}
+
+.add-ingredient-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #C8A97E;
+  color: #C8A97E;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  width: fit-content;
+}
+
+.add-ingredient-btn:hover {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.add-ingredient-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.cancel-button,
+.submit-button {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.cancel-button {
+  background: transparent;
+  color: #C8A97E;
+  border: 2px solid #C8A97E;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background: rgba(200, 169, 126, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.submit-button {
+  background: #C8A97E;
+  color: #0A0A0A;
+  border: 2px solid #C8A97E;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #d1bfa5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+}
+
+.cancel-button:disabled,
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

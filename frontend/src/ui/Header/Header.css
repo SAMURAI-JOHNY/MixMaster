@@ -1,0 +1,176 @@
+.header {
+  background: #231717;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 0;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.menu-button:hover {
+  background: rgba(200, 169, 126, 0.2);
+}
+
+.menu-button img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #231717;
+  border: 1px solid #616161;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  min-width: 400px;
+  min-height: 600px;
+  z-index: 1001;
+  margin-top: 10px;
+  animation: slideDown 0.3s ease;
+  display: none;
+}
+
+.dropdown-menu.open {
+  display: block;
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.menu-item {
+  font-family: 'Bad Script', cursive;
+  background: transparent;
+  border: none;
+  color: #C8A97E;
+  padding: 12px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  padding-right: 0;
+}
+
+.avatar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.avatar-button:hover {
+  transform: scale(1.1);
+}
+
+.default-avatar {
+  width: 100%;
+  height: 100%;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+.user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 300px;
+    min-height: 400px;
+  }
+  
+  .menu-item {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-menu {
+    min-width: 250px;
+    min-height: 350px;
+  }
+  
+  .menu-item {
+    font-size: 28px;
+    padding: 10px 15px;
+  }
+  
+  .avatar-button {
+    width: 40px;
+    height: 40px;
+  }
+}
