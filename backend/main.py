@@ -12,6 +12,8 @@ from api.routers.recieps import router as recipes_router
 from api.routers.ingredients import router as ingredients_router
 from api.routers.upload import router as upload_router
 from api.routers.prepared_cocktails import router as prepared_cocktails_router
+from api.routers.seo import router as seo_router, structured_router as seo_structured_router
+from api.routers.external_cocktails import router as external_cocktails_router
 
 app = FastAPI()
 
@@ -76,6 +78,9 @@ app.include_router(recipes_router, prefix="/api/v1")
 app.include_router(ingredients_router, prefix="/api/v1")
 app.include_router(upload_router, prefix="/api/v1")
 app.include_router(prepared_cocktails_router, prefix="/api/v1")
+app.include_router(seo_router)
+app.include_router(seo_structured_router)
+app.include_router(external_cocktails_router, prefix="/api/v1")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -13,6 +13,7 @@ import { ResolvedImage } from '../../components/ResolvedImage/ResolvedImage';
 import { FileUploadZone } from '../../components/FileUploadZone/FileUploadZone';
 import { uploadAPI } from '../../api/upload';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 import Plus from '../../assets/ingr_button.svg';
 
 const CreateRecipePage = () => {
@@ -55,10 +56,10 @@ const CreateRecipePage = () => {
           const tokenCheck = await authAPI.verifyToken();
           if (tokenCheck.valid) {
             setIsLoggedIn(true);
-            const profile = await authAPI.getProfile();
-            setUserRole(profile.role);
+            const role = tokenCheck.role ?? null;
+            setUserRole(role);
 
-            if (profile.role !== 'бармен') {
+            if (role !== 'бармен') {
               setError('Только бармены могут создавать рецепты');
               setTimeout(() => navigate('/'), 2000);
               return;
@@ -235,6 +236,7 @@ const CreateRecipePage = () => {
   if (!isLoggedIn || userRole !== 'бармен') {
     return (
       <div className="create-recipe-page">
+        <Seo title="Создание рецепта" description="Служебная страница MixMaster для барменов." noindex />
         <Header />
         <div
           style={{
@@ -255,6 +257,7 @@ const CreateRecipePage = () => {
 
   return (
     <div className="create-recipe-page">
+      <Seo title="Создание рецепта" description="Служебная страница MixMaster для барменов." noindex />
       <Header />
       {error && (
         <div
@@ -270,6 +273,7 @@ const CreateRecipePage = () => {
         </div>
       )}
       <div className="create-recipe-content">
+        <h1 className="create-recipe-title">Новый рецепт</h1>
         <section className="photo-section">
           <div className="photo-upload-container">
             {recipe.photoPreview || recipe.photoStorageUrl ? (

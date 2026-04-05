@@ -47,6 +47,8 @@ export const ResolvedImage: React.FC<ResolvedImageProps> = ({
       src={src}
       alt={alt}
       className={className}
+      loading="lazy"
+      decoding="async"
       onError={() => setFailed(true)}
     />
   );

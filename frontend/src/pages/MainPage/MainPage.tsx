@@ -10,6 +10,7 @@ import SearchIcon from '../../assets/search.svg';
 import FilterIcon from '../../assets/filter.svg';
 import { cocktailsAPI } from '../../api/cocktails';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -41,8 +42,7 @@ const MainPage = () => {
           const tokenCheck = await authAPI.verifyToken();
           if (tokenCheck.valid) {
             setIsLoggedIn(true);
-            const profile = await authAPI.getProfile();
-            setUserRole(profile.role);
+            setUserRole(tokenCheck.role ?? null);
           }
         } catch (err) {
           setIsLoggedIn(false);
@@ -169,10 +169,21 @@ const MainPage = () => {
     setShowFilterMenu(false);
   };
 
+  const canonicalPath =
+    searchQuery || category || hasRecipes || page > 1 || sortBy !== 'name' || sortOrder !== 'asc'
+      ? `/?${searchParams.toString()}`
+      : '/';
+
   return (
     <div className="main-page">
+      <Seo
+        title="Каталог коктейлей"
+        description="MixMaster — каталог коктейлей с поиском, фильтрами и рецептами. Подберите напиток и откройте карточку с ингредиентами."
+        canonicalPath={canonicalPath === '/' ? '/' : canonicalPath}
+      />
       <Header />
 
+      <main className="main-page-content">
       <div className="main-actions">
         <div className="search-container">
           <div className="search-input-wrapper">
@@ -281,6 +292,8 @@ const MainPage = () => {
         )}
       </div>
 
+      <h1 className="main-page-heading">Каталог коктейлей</h1>
+
       <div className="cocktails-section">
         {isLoading ? (
           <div className="loading">Загрузка коктейлей...</div>
@@ -319,6 +332,7 @@ const MainPage = () => {
           </button>
         </div>
       </footer>
+      </main>
     </div>
   );
 };

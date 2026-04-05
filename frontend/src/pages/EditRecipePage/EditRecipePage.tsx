@@ -6,6 +6,7 @@ import { Header } from '../../ui/Header/Header';
 import { recipesAPI } from '../../api/recipes';
 import { ingredientsAPI } from '../../api/ingredients';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 import Plus from '../../assets/ingr_button.svg';
 
 const EditRecipePage = () => {
@@ -45,10 +46,10 @@ const EditRecipePage = () => {
           const tokenCheck = await authAPI.verifyToken();
           if (tokenCheck.valid) {
             setIsLoggedIn(true);
-            const profile = await authAPI.getProfile();
-            setUserRole(profile.role);
+            const role = tokenCheck.role ?? null;
+            setUserRole(role);
 
-            if (profile.role !== 'бармен') {
+            if (role !== 'бармен') {
               setError('Только бармены могут редактировать рецепты');
               setTimeout(() => navigate('/'), 2000);
               return;
@@ -189,6 +190,7 @@ const EditRecipePage = () => {
   if (!isLoggedIn || userRole !== 'бармен') {
     return (
       <div className="edit-recipe-page">
+        <Seo title="Редактирование рецепта" noindex description="Служебная страница MixMaster." />
         <Header />
         <div className="edit-recipe-container">
           <div className="error-message">{error || 'Доступ запрещен'}</div>
@@ -199,6 +201,7 @@ const EditRecipePage = () => {
 
   return (
     <div className="edit-recipe-page">
+      <Seo title="Редактирование рецепта" noindex description="Служебная страница MixMaster." />
       <Header />
       <div className="edit-recipe-container">
         <div className="edit-recipe-content">

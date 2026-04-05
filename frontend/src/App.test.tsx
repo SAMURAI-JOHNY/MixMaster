@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders catalog heading', async () => {
+  render(
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>,
+  );
+  expect(await screen.findByRole('heading', { name: /каталог коктейлей/i })).toBeInTheDocument();
 });
-

@@ -5,6 +5,7 @@ import { Header } from '../../ui/Header/Header';
 import { Button } from '../../ui/Button/Button';
 import { preparedCocktailsAPI } from '../../api/preparedCocktails';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 import { ResolvedImage } from '../../components/ResolvedImage/ResolvedImage';
 import FallbackCocktailImg from '../../assets/ingredient.svg';
 import './MyPreparedPage.css';
@@ -62,6 +63,7 @@ const MyPreparedPage = () => {
   if (isLoading) {
     return (
       <div className="my-prepared-page">
+        <Seo title="Мои приготовленные коктейли" noindex description="Личный раздел MixMaster." />
         <Header />
         <div className="my-prepared-container">
           <div>Загрузка...</div>
@@ -72,6 +74,7 @@ const MyPreparedPage = () => {
 
   return (
     <div className="my-prepared-page">
+      <Seo title="Мои приготовленные коктейли" noindex description="Личный раздел MixMaster." />
       <Header />
       <div className="my-prepared-container">
         <div className="my-prepared-header">

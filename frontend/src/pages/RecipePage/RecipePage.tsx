@@ -13,6 +13,8 @@ import { recipesAPI } from '../../api/recipes';
 import { preparedCocktailsAPI } from '../../api/preparedCocktails';
 import { ResolvedImage } from '../../components/ResolvedImage/ResolvedImage';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
+import { externalCocktailsAPI } from '../../api/externalCocktails';
 
 const RecipePage = () => {
   const navigate = useNavigate();
@@ -28,6 +30,10 @@ const RecipePage = () => {
   const [isPrepared, setIsPrepared] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [externalItems, setExternalItems] = useState([]);
+  const [externalLoading, setExternalLoading] = useState(false);
+  const [externalDegraded, setExternalDegraded] = useState(false);
+  const [externalMessage, setExternalMessage] = useState(null);
 
   // Проверка авторизации
   useEffect(() => {
@@ -38,12 +44,7 @@ const RecipePage = () => {
           const tokenCheck = await authAPI.verifyToken();
           setIsLoggedIn(tokenCheck.valid);
           if (tokenCheck.valid) {
-            try {
-              const profile = await authAPI.getProfile();
-              setUserRole(profile.role);
-            } catch (err) {
-              console.error('Ошибка загрузки профиля:', err);
-            }
+            setUserRole(tokenCheck.role ?? null);
           }
         } catch (err) {
           setIsLoggedIn(false);
@@ -80,6 +81,35 @@ const RecipePage = () => {
       loadData();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!cocktail?.name || String(cocktail.id) !== String(id)) return;
+    let cancelled = false;
+    const run = async () => {
+      setExternalLoading(true);
+      setExternalDegraded(false);
+      setExternalMessage(null);
+      try {
+        const res = await externalCocktailsAPI.searchByName(cocktail.name);
+        if (cancelled) return;
+        setExternalItems(res.items ?? []);
+        setExternalDegraded(Boolean(res.degraded));
+        setExternalMessage(res.message ?? null);
+      } catch (e) {
+        if (!cancelled) {
+          setExternalItems([]);
+          setExternalDegraded(true);
+          setExternalMessage('Сервис справочника временно недоступен');
+        }
+      } finally {
+        if (!cancelled) setExternalLoading(false);
+      }
+    };
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [cocktail?.name, cocktail?.id, id]);
 
   // Проверяем, был ли коктейль приготовлен (если пользователь авторизован)
   useEffect(() => {
@@ -253,9 +283,15 @@ const RecipePage = () => {
     }
   };
 
+  const siteBase =
+    typeof process.env.REACT_APP_SITE_URL === 'string' && process.env.REACT_APP_SITE_URL.length > 0
+      ? process.env.REACT_APP_SITE_URL.replace(/\/$/, '')
+      : '';
+
   if (isLoading) {
     return (
       <div className="recipe-page">
+        <Seo title="Загрузка карточки коктейля" noindex />
         <Header />
         <div className="recipe-container">
           <div>Загрузка...</div>
@@ -267,18 +303,52 @@ const RecipePage = () => {
   if (error || !cocktail) {
     return (
       <div className="recipe-page">
+        <Seo
+          title="Коктейль не найден"
+          description="Коктейль отсутствует в каталоге MixMaster."
+          noindex
+        />
         <Header />
         <div className="recipe-container">
-          <div>{error || 'Коктейль не найден'}</div>
+          <main>
+            <h1 className="recipe-not-found-title">Коктейль не найден</h1>
+            <p>{error || 'Коктейль не найден'}</p>
+          </main>
         </div>
       </div>
     );
   }
 
+  const descSource = cocktail.description || cocktail.instructions || '';
+  const pageDescription =
+    descSource.length > 160 ? `${descSource.slice(0, 157)}…` : descSource || `Рецепт и ингредиенты: ${cocktail.name}`;
+  const ogImage =
+    typeof cocktail.image_url === 'string' && cocktail.image_url.startsWith('http')
+      ? cocktail.image_url
+      : undefined;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Recipe',
+    name: cocktail.name,
+    description: (cocktail.description || cocktail.instructions || '').slice(0, 2000),
+    url: siteBase ? `${siteBase}/recipe/${id}` : undefined,
+    ...(cocktail.category ? { recipeCategory: cocktail.category } : {}),
+    ...(ogImage ? { image: [ogImage] } : {}),
+  };
+
   return (
     <div className="recipe-page">
+      <Seo
+        title={cocktail.name}
+        description={pageDescription}
+        canonicalPath={`/recipe/${id}`}
+        ogImage={ogImage}
+        ogType="article"
+        jsonLd={jsonLd}
+      />
       <Header />
       <div className="recipe-container">
+        <main>
         <div className="recipe-header-section">
           <div className="recipe-text-content">
             <div className="cocktail-title-row">
@@ -401,6 +471,48 @@ const RecipePage = () => {
             </div>
           </section>
 
+          <section className="recipe-external-section" aria-labelledby="external-cocktails-heading">
+            <h2 id="external-cocktails-heading" className="section-title">
+              Справочник TheCocktailDB
+            </h2>
+            <p className="recipe-external-note">
+              Варианты из открытого API для сравнения; при сбое сервиса блок можно игнорировать — ваш каталог
+              MixMaster работает как обычно.
+            </p>
+            {externalLoading ? (
+              <div className="recipe-external-state">Загрузка внешних совпадений…</div>
+            ) : externalDegraded ? (
+              <div className="recipe-external-state recipe-external-muted">
+                Не удалось загрузить данные справочника.
+                {externalMessage ? ` (${externalMessage})` : ''}
+              </div>
+            ) : externalItems.length === 0 ? (
+              <div className="recipe-external-state recipe-external-muted">Совпадений по названию не найдено.</div>
+            ) : (
+              <ul className="recipe-external-list">
+                {externalItems.map((item) => (
+                  <li key={item.external_id} className="recipe-external-item">
+                    {item.thumb_url ? (
+                      <img
+                        src={item.thumb_url}
+                        alt=""
+                        className="recipe-external-thumb"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : null}
+                    <div className="recipe-external-text">
+                      <h3 className="recipe-external-name">{item.name}</h3>
+                      {item.category ? (
+                        <p className="recipe-external-meta">{item.category}</p>
+                      ) : null}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
           <section>
             <h2 className="section-title">Информация о коктейле</h2>
             <div className="cocktail-info">
@@ -455,6 +567,7 @@ const RecipePage = () => {
             </div>
           </section>
         </div>
+        </main>
       </div>
     </div>
   );

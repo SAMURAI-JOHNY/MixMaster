@@ -19,6 +19,11 @@ def get_cocktails(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Cocktail).offset(skip).limit(limit).all()
 
 
+def get_all_cocktail_ids(db: Session) -> List[int]:
+    rows = db.query(Cocktail.id).order_by(Cocktail.id.asc()).all()
+    return [r[0] for r in rows]
+
+
 def query_cocktails(
     db: Session,
     q: Optional[str] = None,

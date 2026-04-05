@@ -5,7 +5,9 @@ COPY frontend/package.json frontend/package-lock.json frontend/.npmrc ./
 RUN npm ci
 COPY frontend/ ./
 ARG REACT_APP_API_BASE_URL=/api/v1
+ARG REACT_APP_SITE_URL=http://localhost:8080
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+ENV REACT_APP_SITE_URL=$REACT_APP_SITE_URL
 RUN npm run build
 
 FROM nginx:1.27-alpine

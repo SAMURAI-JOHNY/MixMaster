@@ -2,10 +2,26 @@
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   background: #0A0A0A;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ingredientsPageInner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ingredientsPageTitle {
+  width: 100%;
+  margin: 0 0 16px;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #c8a97e;
+  text-align: center;
 }
 
 @media (max-width: 600px) {

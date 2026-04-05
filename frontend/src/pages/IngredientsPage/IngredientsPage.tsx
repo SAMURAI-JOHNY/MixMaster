@@ -6,6 +6,7 @@ import styles from './IngredientsPage.css';
 import Header from '../../ui/Header/Header';
 import { ingredientsAPI } from '../../api/ingredients';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 
 const DEFAULT_LIMIT = 20;
 
@@ -78,12 +79,7 @@ const IngredientsPage = () => {
           const tokenCheck = await authAPI.verifyToken();
           if (tokenCheck.valid) {
             setIsLoggedIn(true);
-            try {
-              const profile = await authAPI.getProfile();
-              setUserRole(profile.role ?? null);
-            } catch {
-              setUserRole(null);
-            }
+            setUserRole(tokenCheck.role ?? null);
           } else {
             setError('Необходимо войти в систему для просмотра ингредиентов');
             setIsLoading(false);
@@ -145,32 +141,42 @@ const IngredientsPage = () => {
 
   return (
     <div className={styles.ingredientsPage}>
+      <Seo
+        title="Склад ингредиентов"
+        description="Учёт ингредиентов MixMaster — только для авторизованных пользователей."
+        noindex
+      />
       <Header />
-      {isLoading ? (
-        <div style={{ padding: '20px', textAlign: 'center', color: '#C8A97E' }}>Загрузка ингредиентов...</div>
-      ) : error ? (
-        <div
-          style={{
-            padding: '20px',
-            textAlign: 'center',
-            color: '#ff6b6b',
-            backgroundColor: 'rgba(255, 107, 107, 0.1)',
-            margin: '20px',
-            borderRadius: '8px',
-            border: '1px solid #ff6b6b',
-          }}
-        >
-          {error}
-        </div>
-      ) : isLoggedIn ? (
-        <IngredientList
-          items={ingredients}
-          listQuery={listQuery}
-          applyListQuery={applyListQuery}
-          onItemsChange={loadIngredients}
-          showAttachmentsList={userRole === 'бармен'}
-        />
-      ) : null}
+      <div className={styles.ingredientsPageInner}>
+        {isLoading ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: '#C8A97E' }}>Загрузка ингредиентов...</div>
+        ) : error ? (
+          <div
+            style={{
+              padding: '20px',
+              textAlign: 'center',
+              color: '#ff6b6b',
+              backgroundColor: 'rgba(255, 107, 107, 0.1)',
+              margin: '20px',
+              borderRadius: '8px',
+              border: '1px solid #ff6b6b',
+            }}
+          >
+            {error}
+          </div>
+        ) : isLoggedIn ? (
+          <>
+            <h1 className={styles.ingredientsPageTitle}>Склад ингредиентов</h1>
+            <IngredientList
+              items={ingredients}
+              listQuery={listQuery}
+              applyListQuery={applyListQuery}
+              onItemsChange={loadIngredients}
+              showAttachmentsList={userRole === 'бармен'}
+            />
+          </>
+        ) : null}
+      </div>
     </div>
   );
 };

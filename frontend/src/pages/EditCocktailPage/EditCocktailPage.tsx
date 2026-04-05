@@ -10,6 +10,7 @@ import { FileUploadZone } from '../../components/FileUploadZone/FileUploadZone';
 import { AttachedFilesList } from '../../components/AttachedFilesList/AttachedFilesList';
 import { uploadAPI } from '../../api/upload';
 import { authAPI } from '../../api/auth';
+import { Seo } from '../../components/Seo/Seo';
 import ImageImg from '../../assets/img.svg';
 import DeleteButton from '../../assets/delete.svg';
 
@@ -40,15 +41,11 @@ const EditCocktailPage = () => {
           const tokenCheck = await authAPI.verifyToken();
           setIsLoggedIn(tokenCheck.valid);
           if (tokenCheck.valid) {
-            try {
-              const profile = await authAPI.getProfile();
-              setUserRole(profile.role);
-              if (profile.role !== 'бармен') {
-                setError('Только бармены могут редактировать коктейли');
-                setTimeout(() => navigate('/'), 2000);
-              }
-            } catch (err) {
-              console.error('Ошибка загрузки профиля:', err);
+            const role = tokenCheck.role ?? null;
+            setUserRole(role);
+            if (role !== 'бармен') {
+              setError('Только бармены могут редактировать коктейли');
+              setTimeout(() => navigate('/'), 2000);
             }
           }
         } catch (err) {
@@ -199,6 +196,7 @@ const EditCocktailPage = () => {
   if (!isLoggedIn || userRole !== 'бармен') {
     return (
       <div className="edit-cocktail-page">
+        <Seo title="Редактирование коктейля" noindex description="Служебная страница MixMaster." />
         <Header />
         <div className="edit-cocktail-container">
           <div className="error-message">{error || 'Доступ запрещен'}</div>
@@ -209,6 +207,7 @@ const EditCocktailPage = () => {
 
   return (
     <div className="edit-cocktail-page">
+      <Seo title="Редактирование коктейля" noindex description="Служебная страница MixMaster." />
       <Header />
       <div className="edit-cocktail-container">
         <div className="edit-cocktail-content">

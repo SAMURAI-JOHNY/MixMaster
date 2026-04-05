@@ -6,6 +6,21 @@
   flex-direction: column;
 }
 
+.main-page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.main-page-heading {
+  text-align: center;
+  color: #c8a97e;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 8px 16px 16px;
+}
+
 .main-header {
   text-align: center;
 }
