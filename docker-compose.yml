@@ -1,0 +1,135 @@
+# Полный стек: Postgres, MinIO, FastAPI, Nginx (SPA + /api → backend).
+# Запуск: скопируйте .env.example → .env, затем: docker compose up --build -d
+# Веб: http://localhost:8080  |  MinIO API: :9000, консоль: :9001
+#
+# Presigned-ссылки S3 указывают на хост из S3_ENDPOINT_URL (внутри сети: minio:9000).
+# Чтобы браузер мог PUT в MinIO, добавьте в hosts: 127.0.0.1 minio
+# или поднимайте backend локально с S3_ENDPOINT_URL=http://127.0.0.1:9000
+
+name: mixmaster
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mixmaster
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mixmaster_db_dev}
+      POSTGRES_DB: mixmaster
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mixmaster -d mixmaster"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks: [mixmaster]
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: mixmaster
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-mixmaster_secret_change_me}
+      # CORS для presigned PUT/GET из браузера (без PutBucketCors — в части версий mc даёт NotImplemented).
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
+    volumes:
+      - mixmaster_minio_data:/data
+    # Образ часто без curl/sh для CMD healthcheck — готовность проверяет minio-init
+    networks: [mixmaster]
+
+  # Скрипт встроен в compose: монтирование .sh с Windows даёт CRLF → «set: invalid option» в контейнере.
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    environment:
+      MINIO_ROOT_USER: mixmaster
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-mixmaster_secret_change_me}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        sleep 2
+        i=0
+        ok=0
+        while [ "$$i" -lt 45 ]; do
+          if mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"; then
+            ok=1
+            break
+          fi
+          i=$$((i + 1))
+          sleep 2
+        done
+        if [ "$$ok" != 1 ]; then
+          echo "minio-init: could not connect to minio:9000" >&2
+          exit 1
+        fi
+        mc mb local/mixmaster --ignore-existing
+    networks: [mixmaster]
+    restart: "no"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://mixmaster:${POSTGRES_PASSWORD:-mixmaster_db_dev}@db:5432/mixmaster
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-jwt-secret-change-me-min-32-chars!!}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080,http://localhost,http://127.0.0.1,http://localhost:3000,http://127.0.0.1:3000}
+      STORAGE_PROVIDER: s3
+      S3_ENDPOINT_URL: http://minio:9000
+      # Хост:порт MinIO с машины пользователя (браузер не знает имя «minio» в Docker-сети)
+      S3_PRESIGN_ENDPOINT_URL: http://127.0.0.1:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: mixmaster
+      S3_ACCESS_KEY_ID: mixmaster
+      S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-mixmaster_secret_change_me}
+      SQL_ECHO: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    expose:
+      - "8000"
+    networks: [mixmaster]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gateway
+      args:
+        REACT_APP_API_BASE_URL: /api/v1
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [mixmaster]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+networks:
+  mixmaster:
+
+volumes:
+  postgres_data:
+  mixmaster_minio_data:

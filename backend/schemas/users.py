@@ -8,12 +8,14 @@ class UserBase(BaseModel):
     full_name: Optional[str] = None
     avatar_url: Optional[str] = None
     role: Optional[str] = UserRole.AMATEUR.value
-    
+
     @field_validator('role')
     @classmethod
     def validate_role(cls, v):
         if v is not None and v not in [UserRole.BARTENDER.value, UserRole.AMATEUR.value]:
-            raise ValueError(f'Role must be either "{UserRole.BARTENDER.value}" or "{UserRole.AMATEUR.value}"')
+            raise ValueError(
+                f'Role must be either "{UserRole.BARTENDER.value}" or "{UserRole.AMATEUR.value}"'
+            )
         return v or UserRole.AMATEUR.value
 
 class UserCreate(UserBase):
@@ -42,7 +44,12 @@ class User(UserBase):
 
 class Token(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str

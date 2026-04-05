@@ -151,17 +151,23 @@
 }
 
 .photo-upload-area {
-  display: block;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: default;
   width: 100%;
   height: 100%;
   position: relative;
+  box-sizing: border-box;
+  padding: 16px;
 }
 
 .photo-upload-area img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
   display: block;
 }
 
@@ -171,17 +177,21 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  flex: 0 0 auto;
+  pointer-events: none;
 }
 
 .upload-placeholder img {
   width: 80px;
   height: 80px;
   opacity: 0.5;
+}
+
+.photo-upload-area .file-upload-zone {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  justify-content: center;
 }
 
 .upload-text {

@@ -1,0 +1,49 @@
+.file-upload-zone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.file-upload-zone__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-upload-zone__btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #c4a574;
+  background: linear-gradient(180deg, #3d2a1f 0%, #2a1a12 100%);
+  color: #f5e6d3;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-upload-zone__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-upload-zone__hint {
+  font-size: 12px;
+  color: #a09080;
+}
+
+.file-upload-zone__status {
+  width: 100%;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.file-upload-zone--error .file-upload-zone__status {
+  color: #ff6b6b;
+}
+
+.file-upload-zone--success .file-upload-zone__status {
+  color: #69db7c;
+}

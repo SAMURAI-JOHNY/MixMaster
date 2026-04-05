@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc
 from database.models import Ingredient, RecipeIngredient
 from typing import List, Optional
 
@@ -16,6 +16,42 @@ def get_ingredient_by_name(db: Session, name: str):
 
 def get_ingredients(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Ingredient).offset(skip).limit(limit).all()
+
+
+def query_ingredients(
+    db: Session,
+    q: Optional[str] = None,
+    min_volume: Optional[int] = None,
+    max_volume: Optional[int] = None,
+    sort_by: str = "name",
+    sort_order: str = "asc",
+    page: int = 1,
+    limit: int = 20,
+):
+    query = db.query(Ingredient)
+
+    if q:
+        query = query.filter(Ingredient.name.ilike(f"%{q}%"))
+    if min_volume is not None:
+        query = query.filter(Ingredient.volume >= min_volume)
+    if max_volume is not None:
+        query = query.filter(Ingredient.volume <= max_volume)
+
+    total = query.count()
+
+    sort_column = {
+        "name": Ingredient.name,
+        "volume": Ingredient.volume,
+    }.get(sort_by, Ingredient.name)
+    order_fn = desc if sort_order == "desc" else asc
+
+    items = (
+        query.order_by(order_fn(sort_column), Ingredient.id.asc())
+        .offset((page - 1) * limit)
+        .limit(limit)
+        .all()
+    )
+    return items, total
 
 
 def create_ingredient(db: Session, ingredient: IngredientCreate):
@@ -37,6 +73,7 @@ def update_ingredient(db: Session, ingredient_id: int, ingredient_update: Ingred
         return None
 
     update_data = ingredient_update.dict(exclude_unset=True)
+    old_image = db_ingredient.image_url
 
     # Проверяем уникальность названия, если оно изменяется
     if 'name' in update_data and update_data['name'] != db_ingredient.name:
@@ -49,6 +86,11 @@ def update_ingredient(db: Session, ingredient_id: int, ingredient_update: Ingred
 
     for field, value in update_data.items():
         setattr(db_ingredient, field, value)
+
+    if "image_url" in update_data and old_image and old_image != db_ingredient.image_url:
+        from crud.file_attachments import purge_storage_url
+
+        purge_storage_url(db, old_image)
 
     db.commit()
     db.refresh(db_ingredient)
@@ -66,6 +108,16 @@ def delete_ingredient(db: Session, ingredient_id: int):
 
     if used_in_recipes:
         return None
+
+    from crud.file_attachments import purge_all_for_entity
+    from database.models import FileEntityType
+
+    purge_all_for_entity(
+        db,
+        FileEntityType.INGREDIENT.value,
+        ingredient_id,
+        db_ingredient.image_url,
+    )
 
     db.delete(db_ingredient)
     db.commit()

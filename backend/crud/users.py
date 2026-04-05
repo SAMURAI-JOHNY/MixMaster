@@ -6,10 +6,14 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from fastapi import HTTPException, status
 from typing import Optional
+import secrets
+import hashlib
+import os
 
-SECRET_KEY = "your-secret-key-here-change-in-production"  # Измените на случайную строку
+SECRET_KEY = os.getenv("JWT_SECRET_KEY") or "your-secret-key-here-change-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
@@ -21,7 +25,6 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: UserCreate):
-    # Проверяем, существует ли пользователь
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(
@@ -29,7 +32,6 @@ def create_user(db: Session, user: UserCreate):
             detail="Username already registered"
         )
     
-    # Хэшируем пароль
     hashed_password = User.hash_password(user.password)
     
     db_user = User(
@@ -59,15 +61,27 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     else:
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
-    to_encode.update({"exp": expire})
+    to_encode.update({"type": "access", "exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+def create_refresh_token_string() -> str:
+    return secrets.token_urlsafe(32)
+
+
+def hash_refresh_token(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
+            return None
+        token_type = payload.get("type")
+        # Старые токены могли не содержать тип.
+        if token_type is not None and token_type != "access":
             return None
         return username
     except JWTError:

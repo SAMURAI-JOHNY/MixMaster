@@ -1,0 +1,76 @@
+.attached-files-list {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(196, 165, 116, 0.25);
+}
+
+.attached-files-list--loading {
+  color: #a09080;
+  font-size: 14px;
+}
+
+.attached-files-list__error {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.attached-files-list__empty {
+  margin: 0;
+  font-size: 14px;
+  color: #a09080;
+}
+
+.attached-files-list__ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attached-files-list__li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.attached-files-list__li:last-child {
+  border-bottom: none;
+}
+
+.attached-files-list__name {
+  flex: 1 1 140px;
+  font-size: 14px;
+  color: #f5e6d3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attached-files-list__meta {
+  font-size: 12px;
+  color: #8a7a6a;
+}
+
+.attached-files-list__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.attached-files-list__actions button {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #c4a574;
+  background: #2a1a12;
+  color: #f5e6d3;
+  cursor: pointer;
+}
+
+.attached-files-list__actions button:hover {
+  filter: brightness(1.1);
+}

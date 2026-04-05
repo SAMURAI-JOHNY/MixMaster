@@ -4,11 +4,11 @@ from typing import List, Optional
 
 from crud.ingredients import decrease_ingredient_volume, increase_ingredient_volume, get_popular_ingredients, \
     bulk_create_ingredients, search_ingredients, delete_ingredient, update_ingredient, get_ingredient, get_ingredients, \
-    create_ingredient, get_ingredient_by_name
+    create_ingredient, get_ingredient_by_name, query_ingredients
 from database.database import get_db
 from schemas.ingredients import IngredientWithRecipesResponse, IngredientCreate, IngredientResponse, \
-    IngredientSearch, IngredientUpdate
-from api.routers.auth import get_current_user
+    IngredientSearch, IngredientUpdate, IngredientQueryResponse
+from api.routers.auth import get_current_user, get_bartender_user
 from database.models import User
 
 router = APIRouter(prefix="/ingredients", tags=["ingredients"])
@@ -17,7 +17,8 @@ router = APIRouter(prefix="/ingredients", tags=["ingredients"])
 @router.post("/", response_model=IngredientResponse)
 def create_ingredient_endpoint(
         ingredient: IngredientCreate,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_bartender_user)
 ):
     existing = get_ingredient_by_name(db, ingredient.name)
     if existing:
@@ -39,6 +40,38 @@ def get_ingredients_endpoint(
     return get_ingredients(db, skip=skip, limit=limit)
 
 
+@router.get("/query/", response_model=IngredientQueryResponse)
+def query_ingredients_endpoint(
+        q: Optional[str] = Query(default=None, max_length=120),
+        min_volume: Optional[int] = Query(default=None, ge=0),
+        max_volume: Optional[int] = Query(default=None, ge=0),
+        sort_by: str = Query(default="name", pattern="^(name|volume)$"),
+        sort_order: str = Query(default="asc", pattern="^(asc|desc)$"),
+        page: int = Query(default=1, ge=1),
+        limit: int = Query(default=20, ge=1, le=100),
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    items, total = query_ingredients(
+        db=db,
+        q=q,
+        min_volume=min_volume,
+        max_volume=max_volume,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        page=page,
+        limit=limit,
+    )
+    pages = (total + limit - 1) // limit if total else 0
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": pages,
+    }
+
+
 @router.get("/{ingredient_id}", response_model=IngredientResponse)
 def get_ingredient_endpoint(
         ingredient_id: int,
@@ -55,7 +88,8 @@ def get_ingredient_endpoint(
 def update_ingredient_endpoint(
         ingredient_id: int,
         ingredient_update: IngredientUpdate,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_bartender_user)
 ):
     try:
         ingredient = update_ingredient(db, ingredient_id, ingredient_update)
@@ -72,7 +106,8 @@ def update_ingredient_endpoint(
 @router.delete("/{ingredient_id}")
 def delete_ingredient_endpoint(
         ingredient_id: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_bartender_user)
 ):
     result = delete_ingredient(db, ingredient_id)
     if result is None:
@@ -107,7 +142,8 @@ def search_ingredients_endpoint(
 @router.post("/bulk/", response_model=List[IngredientResponse])
 def bulk_create_ingredients_endpoint(
         ingredients: List[IngredientCreate],
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_bartender_user)
 ):
     return bulk_create_ingredients(db, ingredients)
 
@@ -125,7 +161,8 @@ def get_popular_ingredients_endpoint(
 def increase_ingredient_volume_endpoint(
         ingredient_id: int,
         amount: int = Query(..., gt=0, description="Amount to increase"),
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_bartender_user)
 ):
     ingredient = increase_ingredient_volume(db, ingredient_id, amount)
     if not ingredient:
@@ -137,7 +174,8 @@ def increase_ingredient_volume_endpoint(
 def decrease_ingredient_volume_endpoint(
     ingredient_id: int,
     amount: int = Query(..., gt=0, description="Amount to decrease"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_bartender_user)
 ):
     ingredient = decrease_ingredient_volume(db, ingredient_id, amount)
     if not ingredient:

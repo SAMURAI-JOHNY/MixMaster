@@ -18,6 +18,12 @@ class UserRole(str, enum.Enum):
     BARTENDER = "бармен"
     AMATEUR = "любитель"
 
+
+class FileEntityType(str, enum.Enum):
+    USER_AVATAR = "user_avatar"
+    COCKTAIL = "cocktail"
+    INGREDIENT = "ingredient"
+
 class User(Base):
     __tablename__ = "users"
 
@@ -111,3 +117,38 @@ class PreparedCocktail(Base):
 
     user: Mapped["User"] = relationship("User", back_populates="prepared_cocktails")
     cocktail: Mapped["Cocktail"] = relationship("Cocktail")
+
+
+class FileAttachment(Base):
+    __tablename__ = "file_attachments"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    object_key: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+    storage_url: Mapped[str] = mapped_column(String, unique=True, index=True)
+    entity_type: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    entity_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    original_filename: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    content_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    size_bytes: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    uploaded_by_user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("users.id"), nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    uploaded_by: Mapped[Optional["User"]] = relationship("User", foreign_keys=[uploaded_by_user_id])
+
+
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    token_hash = Column(String, unique=True, index=True, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+
+    revoked = Column(Boolean, default=False, nullable=False)
+    revoked_at = Column(DateTime, nullable=True)
+
+    created_at = Column(DateTime, server_default=func.now())
+
+    user = relationship("User")

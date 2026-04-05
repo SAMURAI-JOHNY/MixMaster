@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional, Literal
 from datetime import datetime
 
 
@@ -68,3 +68,21 @@ class CocktailStats(BaseModel):
     total_with_recipes: int
     total_without_recipes: int
     by_category: dict
+
+
+class CocktailQueryParams(BaseModel):
+    q: Optional[str] = None
+    category: Optional[str] = None
+    has_recipes: Optional[bool] = None
+    sort_by: Literal["name", "created_at", "category"] = "name"
+    sort_order: Literal["asc", "desc"] = "asc"
+    page: int = Field(default=1, ge=1)
+    limit: int = Field(default=12, ge=1, le=100)
+
+
+class CocktailQueryResponse(BaseModel):
+    items: List[CocktailBase]
+    total: int
+    page: int
+    limit: int
+    pages: int

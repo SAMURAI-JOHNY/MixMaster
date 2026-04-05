@@ -6,7 +6,7 @@ from database.database import get_db
 from crud import cocktails as crud_cocktail
 from schemas.cocktails import (
     CocktailCreate, CocktailUpdate, CocktailBase,
-    CocktailWithRecipeCount, CocktailWithRecipes, CocktailStats
+    CocktailWithRecipeCount, CocktailWithRecipes, CocktailStats, CocktailQueryResponse
 )
 from api.routers.auth import get_bartender_user
 
@@ -16,7 +16,8 @@ router = APIRouter(prefix="/cocktails", tags=["cocktails"])
 @router.post("/", response_model=CocktailBase)
 def create_cocktail(
         cocktail: CocktailCreate,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user = Depends(get_bartender_user)
 ):
     existing = crud_cocktail.get_cocktail_by_name(db, cocktail.name)
     if existing:
@@ -35,6 +36,37 @@ def get_cocktails(
         db: Session = Depends(get_db)
 ):
     return crud_cocktail.get_cocktails(db, skip=skip, limit=limit)
+
+
+@router.get("/query/", response_model=CocktailQueryResponse)
+def query_cocktails(
+        q: Optional[str] = Query(default=None, max_length=120),
+        category: Optional[str] = Query(default=None, max_length=80),
+        has_recipes: Optional[bool] = Query(default=None),
+        sort_by: str = Query(default="name", pattern="^(name|created_at|category)$"),
+        sort_order: str = Query(default="asc", pattern="^(asc|desc)$"),
+        page: int = Query(default=1, ge=1),
+        limit: int = Query(default=12, ge=1, le=100),
+        db: Session = Depends(get_db)
+):
+    items, total = crud_cocktail.query_cocktails(
+        db=db,
+        q=q,
+        category=category,
+        has_recipes=has_recipes,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        page=page,
+        limit=limit,
+    )
+    pages = (total + limit - 1) // limit if total else 0
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": pages,
+    }
 
 
 @router.get("/with-recipes/", response_model=List[CocktailWithRecipeCount])
@@ -141,7 +173,8 @@ def get_cocktails_without_recipes(
 @router.post("/bulk/", response_model=List[CocktailBase])
 def bulk_create_cocktails(
         cocktails: List[CocktailCreate],
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user = Depends(get_bartender_user)
 ):
     return crud_cocktail.bulk_create_cocktails(db, cocktails)
 
@@ -162,7 +195,8 @@ def get_cocktail_categories(db: Session = Depends(get_db)):
 def update_cocktail_category(
         cocktail_id: int,
         category: str = Query(..., description="New category"),
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user = Depends(get_bartender_user)
 ):
     cocktail = crud_cocktail.update_cocktail_category(db, cocktail_id, category)
     if not cocktail:

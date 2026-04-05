@@ -24,14 +24,6 @@
   font-weight: 300;
 }
 
-.main-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
-
 .create-recipe-button {
     padding: 12px 24px;
     font-size: 14px;
@@ -156,7 +148,9 @@
   gap: 20px;
 }
 
+/* якорь для .filter-menu (position: absolute) */
 .search-container {
+  position: relative;
   flex: 1;
   max-width: 600px;
   margin-bottom: 0;

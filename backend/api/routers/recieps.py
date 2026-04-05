@@ -136,7 +136,11 @@ def update_recipe_ingredients(
 
 
 @router.patch("/{recipe_id}/complete")
-def complete_recipe(recipe_id: int, db: Session = Depends(get_db)):
+def complete_recipe(
+    recipe_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_bartender_user)
+):
     db_recipe = crud_recipe.complete_recipe(db, recipe_id=recipe_id)
     if not db_recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")

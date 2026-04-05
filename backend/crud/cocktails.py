@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, asc
 from typing import List, Optional
 from datetime import datetime
 
@@ -17,6 +17,45 @@ def get_cocktail_by_name(db: Session, name: str):
 
 def get_cocktails(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Cocktail).offset(skip).limit(limit).all()
+
+
+def query_cocktails(
+    db: Session,
+    q: Optional[str] = None,
+    category: Optional[str] = None,
+    has_recipes: Optional[bool] = None,
+    sort_by: str = "name",
+    sort_order: str = "asc",
+    page: int = 1,
+    limit: int = 12,
+):
+    query = db.query(Cocktail)
+
+    if q:
+        query = query.filter(Cocktail.name.ilike(f"%{q}%"))
+    if category:
+        query = query.filter(Cocktail.category == category)
+    if has_recipes is True:
+        query = query.filter(Cocktail.recipes.any())
+    elif has_recipes is False:
+        query = query.filter(~Cocktail.recipes.any())
+
+    total = query.count()
+
+    sort_column = {
+        "name": Cocktail.name,
+        "created_at": Cocktail.created_at,
+        "category": Cocktail.category,
+    }.get(sort_by, Cocktail.name)
+
+    order_fn = desc if sort_order == "desc" else asc
+    items = (
+        query.order_by(order_fn(sort_column), Cocktail.id.asc())
+        .offset((page - 1) * limit)
+        .limit(limit)
+        .all()
+    )
+    return items, total
 
 
 def create_cocktail(db: Session, cocktail: CocktailCreate):
@@ -40,9 +79,15 @@ def update_cocktail(db: Session, cocktail_id: int, cocktail_update: CocktailUpda
         return None
 
     update_data = cocktail_update.dict(exclude_unset=True)
+    old_image = db_cocktail.image_url
 
     for field, value in update_data.items():
         setattr(db_cocktail, field, value)
+
+    if "image_url" in update_data and old_image and old_image != db_cocktail.image_url:
+        from crud.file_attachments import purge_storage_url
+
+        purge_storage_url(db, old_image)
 
     db.commit()
     db.refresh(db_cocktail)
@@ -65,6 +110,16 @@ def delete_cocktail(db: Session, cocktail_id: int, cascade: bool = True):
     db_cocktail = db.query(Cocktail).filter(Cocktail.id == cocktail_id).first()
     if not db_cocktail:
         return False
+
+    from crud.file_attachments import purge_all_for_entity
+    from database.models import FileEntityType
+
+    purge_all_for_entity(
+        db,
+        FileEntityType.COCKTAIL.value,
+        cocktail_id,
+        db_cocktail.image_url,
+    )
 
     # Проверяем, есть ли связанные рецепты
     recipes = db.query(Recipe).filter(Recipe.cocktail_id == cocktail_id).all()

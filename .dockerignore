@@ -1,0 +1,12 @@
+.git
+.idea
+**/__pycache__
+*.pyc
+.env
+.env.*
+!.env.example
+backend/.venv
+frontend/node_modules
+backend/uploads
+**/*.db
+*.md
