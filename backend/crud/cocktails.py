@@ -159,7 +159,6 @@ def search_cocktails(db: Session, search_params: dict, skip: int = 0, limit: int
 
 def get_cocktails_with_recipe_count(db: Session, skip: int = 0, limit: int = 100):
     """Получить коктейли с количеством рецептов"""
-    from sqlalchemy.orm import aliased
 
     # Подзапрос для подсчета рецептов
     recipe_count = db.query(
@@ -235,7 +234,6 @@ def bulk_create_cocktails(db: Session, cocktails: List[CocktailCreate]):
 
 
 def get_cocktail_stats(db: Session):
-    from sqlalchemy import case
 
     # Общее количество коктейлей
     total_cocktails = db.query(func.count(Cocktail.id)).scalar()

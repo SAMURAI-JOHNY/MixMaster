@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from database.models import Recipe, RecipeIngredient, Ingredient
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 from crud import prepared_cocktails as crud_prepared
 
 

@@ -12,6 +12,37 @@ env:
   JWT_SECRET_KEY: ci-jwt-secret-at-least-32-characters-long!!
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+
+      - name: Ruff (backend)
+        working-directory: backend
+        run: |
+          pip install -r requirements-dev.txt
+          ruff check .
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: ESLint (frontend)
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run lint
+
   backend:
     runs-on: ubuntu-latest
     defaults:
@@ -23,9 +54,17 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: backend/requirements.txt
-      - run: pip install -r requirements.txt
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
       - run: python -c "import main; print('backend import ok')"
+      - run: pytest -q --cov=. --cov-report=xml --cov-report=term-missing
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage
+          path: backend/coverage.xml
 
   frontend:
     runs-on: ubuntu-latest
@@ -40,19 +79,63 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - run: npm run test:unit
+        env:
+          CI: "true"
       - run: npm run build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-coverage
+          path: frontend/coverage
 
   docker-images:
     runs-on: ubuntu-latest
-    needs: [backend, frontend]
+    needs: [backend, frontend, lint]
     steps:
       - uses: actions/checkout@v4
       - run: docker compose build
 
-  # Шаблон деплоя (5.3): подставьте push в registry / SSH / Kubernetes
-  # deploy:
-  #   needs: [docker-images]
-  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - run: echo "Добавьте шаги развертывания"
+  deploy:
+    needs: [docker-images]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Image owner (lowercase for GHCR)
+        run: |
+          echo "IMAGE_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/mixmaster-backend:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/mixmaster-backend:${{ github.sha }}
+
+      - name: Build and push gateway (Nginx + SPA)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.gateway
+          push: true
+          build-args: |
+            REACT_APP_API_BASE_URL=/api/v1
+            REACT_APP_SITE_URL=http://localhost:8080
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/mixmaster-gateway:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/mixmaster-gateway:${{ github.sha }}

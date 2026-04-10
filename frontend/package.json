@@ -20,6 +20,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:unit": "react-scripts test --watchAll=false --testPathIgnorePatterns=e2e",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -40,11 +45,36 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",
+      "^react-router$": "<rootDir>/node_modules/react-router/dist/development/index.js",
+      "^react-router/dom$": "<rootDir>/node_modules/react-router/dist/development/dom-export.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "index.tsx",
+      "reportWebVitals.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 5,
+        "functions": 5,
+        "lines": 8,
+        "statements": 8
+      }
+    }
+  },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "eslint": "^8.57.1",
     "typescript": "^5.9.3"
   }
 }

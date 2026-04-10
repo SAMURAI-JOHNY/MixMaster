@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from database.models import PreparedCocktail, Cocktail
-from typing import List, Optional
 from datetime import datetime
 
 

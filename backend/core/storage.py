@@ -9,7 +9,7 @@ from fastapi import HTTPException
 
 STORAGE_PROVIDER = os.getenv("STORAGE_PROVIDER", "s3").lower()
 S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL")
-# URL для presigned GET/PUT — должен открываться из браузера (не имя сервиса Docker «minio»).
+
 S3_PRESIGN_ENDPOINT_URL = os.getenv("S3_PRESIGN_ENDPOINT_URL")
 S3_REGION = os.getenv("S3_REGION", "us-east-1")
 S3_BUCKET = os.getenv("S3_BUCKET")
@@ -53,12 +53,10 @@ def _make_s3_client(endpoint_url: Optional[str]):
 
 
 def get_s3_client():
-    """Серверные вызовы S3 (удаление и т.д.) — в Docker обычно http://minio:9000."""
     return _make_s3_client(S3_ENDPOINT_URL)
 
 
 def get_s3_presign_client():
-    """Только генерация presigned URL — хост должен быть доступен из браузера."""
     ep = S3_PRESIGN_ENDPOINT_URL or S3_ENDPOINT_URL
     return _make_s3_client(ep)
 

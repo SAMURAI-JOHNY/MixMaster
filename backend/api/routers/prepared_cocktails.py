@@ -7,7 +7,7 @@ from api.routers.auth import get_current_user
 from database.models import User
 from crud import prepared_cocktails as crud_prepared
 from crud import cocktail_preparation as crud_prep
-from schemas.prepared_cocktails import PreparedCocktailResponse, PreparedCocktailCreate, CheckIngredientsRequest, PrepareCocktailRequest
+from schemas.prepared_cocktails import CheckIngredientsRequest, PrepareCocktailRequest
 
 router = APIRouter(prefix="/prepared-cocktails", tags=["prepared-cocktails"])
 

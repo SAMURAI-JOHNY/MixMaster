@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, asc, desc
+from sqlalchemy import asc, desc
 from database.models import Ingredient, RecipeIngredient
 from typing import List, Optional
 

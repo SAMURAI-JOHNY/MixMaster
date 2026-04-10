@@ -1,10 +1,9 @@
 from sqlalchemy.orm import Session
 from database.models import User
 from schemas.users import UserCreate
-import bcrypt
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from typing import Optional
 import secrets
 import hashlib
@@ -89,7 +88,6 @@ def verify_token(token: str):
 
 def update_user(db: Session, user_id: int, user_update):
     """Обновить данные пользователя"""
-    from schemas.users import UserUpdate
     db_user = get_user(db, user_id)
     if not db_user:
         return None
