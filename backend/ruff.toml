@@ -1,0 +1,11 @@
+# https://docs.astral.sh/ruff/configuration/
+target-version = "py312"
+line-length = 100
+
+[lint]
+# Базовый набор: pyflakes + критичные pycodestyle (без массового isort/pyupgrade).
+select = ["E4", "E7", "E9", "F"]
+
+[lint.per-file-ignores]
+# env для SQLite должен быть задан до импорта приложения.
+"tests/conftest.py" = ["E402"]
