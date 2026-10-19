@@ -1,2 +1,51 @@
+# Environment and secrets
 .env
 !.env.example
+**/.env
+!**/.env.example
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.coverage
+**/htmlcov/
+**/*.egg-info/
+**/.venv/
+**/venv/
+**/env/
+
+# Local SQLite / DB dumps
+**/*.db
+**/*.sqlite3
+
+# Node / React
+**/node_modules/
+**/build/
+**/coverage/
+**/.npm/
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Playwright
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/playwright/.cache/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker / local volumes (if ever mounted into tree)
+*.pid
