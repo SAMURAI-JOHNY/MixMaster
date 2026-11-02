@@ -1,0 +1,12 @@
+sequenceDiagram
+  participant U as Пользователь
+  participant UI as Сайт
+  participant API as Backend
+  participant DB as PostgreSQL
+
+  U->>UI: имя и пароль
+  UI->>API: запрос входа
+  API->>DB: найти пользователя
+  DB-->>API: пользователь найден
+  API-->>UI: вход разрешён
+  UI-->>U: профиль в шапке

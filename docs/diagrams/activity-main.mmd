@@ -1,0 +1,19 @@
+flowchart TD
+  Start([Открыть сайт]) --> Catalog[Смотреть каталог]
+  Catalog --> Search[Найти коктейль по имени или категории]
+  Search --> Found{Есть в каталоге?}
+
+  Found -->|да| Card[Открыть карточку рецепта]
+  Found -->|нет| Who{Кто пользователь?}
+  Who -->|гость или любитель| EndMiss([Конец: рецепта нет])
+  Who -->|бармен| LoginB[Войти]
+  LoginB --> Create[Создать коктейль и рецепт]
+  Create --> Card
+
+  Card --> Next{Нужно ещё действие?}
+  Next -->|нет| EndOk([Конец])
+  Next -->|отметить приготовление| LoginA[Войти]
+  LoginA --> Mark[Сохранить в Мои приготовленные]
+  Mark --> EndOk
+  Next -->|искать во внешнем API| Ext[Запрос к TheCocktailDB]
+  Ext --> EndOk

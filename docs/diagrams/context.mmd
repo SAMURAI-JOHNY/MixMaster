@@ -1,0 +1,15 @@
+flowchart LR
+  Guest[Гость]
+  Amateur[Любитель]
+  Bartender[Бармен]
+  MM[MixMaster]
+  PG[(PostgreSQL)]
+  S3[MinIO]
+  CDB[TheCocktailDB]
+
+  Guest --> MM
+  Amateur --> MM
+  Bartender --> MM
+  MM --> PG
+  MM --> S3
+  MM --> CDB
