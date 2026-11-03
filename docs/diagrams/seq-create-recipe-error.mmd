@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant U as Любитель
+  participant UI as Сайт
+  participant API as Backend
+  participant DB as PostgreSQL
+
+  U->>UI: хочет создать рецепт
+  UI->>API: запрос на создание
+  API->>API: смотрит роль в токене
+
+  Note over API: роль любитель, не бармен
+
+  API-->>UI: отказ, нет прав
+  UI-->>U: сообщение: создавать может только бармен
+
+  Note over DB: рецепт в базе не создан
