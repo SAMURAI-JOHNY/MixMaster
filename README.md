@@ -111,7 +111,8 @@ chmod +x scripts/smoke-check.sh
 |------|------------|
 | [docs/00-project.md](docs/00-project.md) | Паспорт, структура, карта функций, практики, план |
 | [docs/01-requirements.md](docs/01-requirements.md) | Требования (ЛР2) |
-| [docs/02-validation.md](docs/02-validation.md) | Валидация (ЛР3) |
+| [docs/interface-contract.md](docs/interface-contract.md) | Контракт API (ЛР3) |
+| [docs/02-validation.md](docs/02-validation.md) | Валидация (по плану курса) |
 | [docs/03-architecture.md](docs/03-architecture.md) | Архитектура (ЛР4) |
 | [docs/04-testing.md](docs/04-testing.md) | Тестирование (ЛР5) |
 | [docs/05-deployment.md](docs/05-deployment.md) | Выпуск (ЛР6) |
