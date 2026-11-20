@@ -8,6 +8,12 @@
 
 ### Added
 
+- ЛР4: тесты контракта `POST /api/v1/cocktails/` (T-1 успех, T-2 ошибка 403) и unit-тесты `validate_file_meta`.
+- Workflow `.github/workflows/pr-checks.yml` (pytest + Ruff на `pull_request` в `main`).
+- Раздел «Тесты и проверки» в `README.md`, заметка `docs/lab4-ci.md`.
+
+### Added (ранее)
+
 - Структура репозитория курса (docs/, adr/, diagrams/).
 - Паспорт проекта `docs/00-project.md` (лабораторная работа №1).
 - Корневой `README.md` с разделом «Запуск» и протоколом проверки.
