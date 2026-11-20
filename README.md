@@ -97,6 +97,47 @@ chmod +x scripts/smoke-check.sh
 
 Кратко: см. [README_SETUP.md](README_SETUP.md) (venv backend) и `frontend/README.md`. Для API обычно нужны Postgres/MinIO из compose либо SQLite (по умолчанию в `backend/database/database.py`).
 
+## Тесты и проверки
+
+Подробнее: [docs/TESTING.md](docs/TESTING.md), [docs/lab4-ci.md](docs/lab4-ci.md).
+
+### Backend (pytest)
+
+```bash
+cd backend
+python -m venv .venv
+# Windows: .\.venv\Scripts\Activate.ps1
+# Linux/macOS: source .venv/bin/activate
+pip install -r requirements-dev.txt
+pytest -q
+```
+
+Контракт создания коктейля (T-1 / T-2):
+
+```bash
+pytest -q tests/integration/test_create_cocktail_contract.py
+```
+
+Линтер backend:
+
+```bash
+cd backend
+ruff check .
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm ci
+npm run test:unit
+npm run lint
+```
+
+### GitHub Actions
+
+При открытии и обновлении pull request в `main` запускается workflow **PR Checks** (`.github/workflows/pr-checks.yml`): pytest и Ruff. Полный пайплайн — в `.github/workflows/ci.yml`.
+
 ## Протокол проверки запуска
 
 | Дата | ОС | Кто проверял | Результат |
@@ -113,7 +154,8 @@ chmod +x scripts/smoke-check.sh
 | [docs/01-requirements.md](docs/01-requirements.md) | Требования (ЛР2) |
 | [docs/interface-contract.md](docs/interface-contract.md) | Контракт API (ЛР3) |
 | [docs/02-validation.md](docs/02-validation.md) | Валидация (по плану курса) |
-| [docs/03-architecture.md](docs/03-architecture.md) | Архитектура (ЛР4) |
+| [docs/lab4-ci.md](docs/lab4-ci.md) | Автопроверки GitHub Actions (ЛР4) |
+| [docs/03-architecture.md](docs/03-architecture.md) | Архитектура |
 | [docs/04-testing.md](docs/04-testing.md) | Тестирование (ЛР5) |
 | [docs/05-deployment.md](docs/05-deployment.md) | Выпуск (ЛР6) |
 | [CHANGELOG.md](CHANGELOG.md) | История изменений |
