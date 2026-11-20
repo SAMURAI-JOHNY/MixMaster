@@ -26,8 +26,7 @@ def test_t1_create_cocktail_success_bartender(
         json=payload,
     )
 
-    # Временно неверный ожид. результат для демонстрации падения CI (ЛР4, задача 3).
-    assert response.status_code == 201
+    assert response.status_code == 200
     body = response.json()
     assert isinstance(body["id"], int)
     assert body["name"] == "Negroni"
